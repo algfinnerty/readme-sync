@@ -1,0 +1,703 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "ChangeCommerce Sales",
+      "version": "v1"
+    },
+    "servers": [
+      {
+        "url": "https://sales.api.shoppinggives.com"
+      }
+    ],
+    "paths": {
+      "/": {
+        "post": {
+          "tags": [
+            "Sales"
+          ],
+          "summary": "Create Sale",
+          "description": "Authorization: Store:Sales:Write",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "Store ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Store ID",
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSaleRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSaleRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSaleRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSaleRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateSaleResponse"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateSaleResponse"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateSaleResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid Request",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DocValidationResponse"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DocValidationResponse"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DocValidationResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/order/{orderId}/partial-return": {
+        "put": {
+          "tags": [
+            "Sales"
+          ],
+          "summary": "Partial Return Order - No Line Items",
+          "description": "<b>ONLY USE THIS IF YOUR INTEGRATION DOESN'T SEND LINE ITEMS</b>\r\n<br />\r\n            Authorization: Store:Sales:Write",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "Store ID",
+              "schema": {
+                "type": "string",
+                "description": "Store ID",
+                "nullable": true,
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "path",
+              "description": "Order ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Order ID",
+                "nullable": true,
+                "example":"#1011"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundWithoutLineItemsRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundWithoutLineItemsRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundWithoutLineItemsRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundWithoutLineItemsRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success"
+            },
+            "400": {
+              "description": "Invalid Request"
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/order/{orderId}/partial-return-current-line-items": {
+        "put": {
+          "tags": [
+            "Sales"
+          ],
+          "summary": "Partial Return Order - Current Line Item Counts",
+          "description": "Authorization: Store:Sales:Write",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "Store ID",
+              "schema": {
+                "type": "string",
+                "description": "Store ID",
+                "nullable": true,
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "path",
+              "description": "Order ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Order ID",
+                "nullable": true,
+                "example": "#1011"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundAllQuantitiesRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundAllQuantitiesRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundAllQuantitiesRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundAllQuantitiesRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success"
+            },
+            "400": {
+              "description": "Invalid Request"
+            },
+            "404": {
+              "description": "Sale not found for Order Id"
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/order/{orderId}/partial-return-line-items": {
+        "put": {
+          "tags": [
+            "Sales"
+          ],
+          "summary": "Partial Return Order - Quantities Returned",
+          "description": "Authorization: Store:Sales:Write",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "Store ID",
+              "schema": {
+                "type": "string",
+                "description": "Store ID",
+                "nullable": true,
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "orderId",
+              "in": "path",
+              "description": "Order ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Order ID",
+                "nullable": true,
+                "example": "#1011"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialRefundRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success"
+            },
+            "400": {
+              "description": "Invalid Request"
+            },
+            "404": {
+              "description": "Sale not found for Order Id"
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/order/{orderId}/refund": {
+        "put": {
+          "tags": [
+            "Sales"
+          ],
+          "summary": "Return order",
+          "description": "Authorization: Store:Sales:Write",
+          "parameters": [
+            
+            {
+              "name": "orderId",
+              "in": "path",
+              "description": "Order ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Order ID",
+                "nullable": true,
+                "example": "#1011"
+              }
+            },
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "Store ID",
+              "schema": {
+                "type": "string",
+                "description": "Store ID",
+                "nullable": true,
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            },
+            "400": {
+              "description": "Invalid Request"
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "PromoCode": {
+          "type": "array",
+          "properties": {
+            "PromoCode": {
+              "type": "string",
+              "description": "Promo Code",
+              "format": "string",
+              "example": "PROMO1234"
+            }
+          },
+          "additionalProperties": false
+        },
+        "PartialRefundWithoutLineItemsRequest": {
+          "type": "object",
+          "properties": {
+            "newAmount": {
+              "type": "number",
+              "description": "The new sale amount after refund",
+              "format": "double",
+              "example": 23.45
+            }
+          },
+          "additionalProperties": false
+        },
+        "PartialRefundAllQuantitiesRequest": {
+          "type": "object",
+          "properties": {
+            "lineItemQuantities": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "description": "Set of Line Item IDs and latest quantities (if there\r\nwere 3 items, and 1 returned, provide 2)",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "PartialRefundRequest": {
+          "type": "object",
+          "properties": {
+            "lineItemQuantityReturned": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "description": "Set of Line Item IDs and quantities returned (if there\r\nwere 3 items, and 1 returned, provide 1)",
+              "nullable": true,
+              "example": 1
+            },
+            "newAmount": {
+              "type": "number",
+              "description": "The new sale Amount after refund",
+              "format": "double",
+              "nullable": true,
+              "example": 23.45
+            }
+          },
+          "additionalProperties": false
+        },
+        "ContractLineItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique Line Item ID. Used in refunds",
+              "nullable": true,
+              "example": "100011232"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the line item",
+              "nullable": true,
+              "example": "Blue T-Shirt - Large"
+            },
+            "sku": {
+              "type": "string",
+              "description": "Product ID. Does not need to be SKU but should be unique. Tied to \"Subitem CMS ID\" in product manager",
+              "nullable": true,
+              "example": "111102"
+            },
+            "costPerItem": {
+              "type": "number",
+              "description": "Cost per item",
+              "format": "double",
+              "example": 10
+            },
+            "quantity": {
+              "type": "integer",
+              "description": "Number of items bought",
+              "format": "int32",
+              "example": 3
+            },
+            "discount": {
+              "type": "number",
+              "description": "Discount for the whole line item (not per quantity)",
+              "format": "double",
+              "example": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateSaleRequest": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "description": "Order ID from Store's system. Must match the user facing order id",
+              "example": "#1011"
+            },
+            "total": {
+              "type": "number",
+              "description": "Total amount of the sale",
+              "format": "double",
+              "example": 110
+            },
+            "subTotal": {
+              "type": "number",
+              "description": "Amount before discount (Line Items alone)",
+              "format": "double",
+              "example": 100
+            },
+            "discount": {
+              "type": "number",
+              "description": "Total discount for the order",
+              "format": "double",
+              "example": 10
+            },
+            "amount": {
+              "type": "number",
+              "description": "Subtotal of shopping cart AFTER discount (Line Items - Discounts)",
+              "format": "double",
+              "example": 90
+            },
+            "promoCodes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PromoCode"
+              },
+              "description": "Coupon / Promo Codes used during purchase",
+              "nullable": true
+              
+            },
+            "trackingId": {
+              "type": "string",
+              "description": "ShoppingGives tracking id. It is best to provide here, but we fall back to setting it via a different\r\nendpoint from the thank you / order confirmation page",
+              "format": "uuid",
+              "nullable": true,
+              "example": "badc6764-2924-4af1-b8f6-19fb2398851a"
+            },
+            "locationId": {
+              "type": "string",
+              "description": "OPTIONAL",
+              "format": "uuid",
+              "nullable": true,
+              "example": "237dbc74-c330-4aba-a896-fc59be1a3263"
+            },
+            "lineItems": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContractLineItem"
+              },
+              "description": "Line items of the order",
+              "nullable": true
+            },
+            "orderCreatedAtUtc": {
+              "type": "string",
+              "description": "Allows us to tell the difference between order creation time and our sale creation time",
+              "format": "date-time",
+              "example": "2021-03-11T18:59:20.0000000+00:00"
+            },
+            "userFirstName": {
+              "type": "string",
+              "description": "(OPTIONAL) The user's first name",
+              "nullable": true,
+              "example": "Jane"
+            },
+            "userLastName": {
+              "type": "string",
+              "description": "(OPTIONAL) The user's last name",
+              "nullable": true,
+              "example": "Smith"
+            },
+            "userEmail": {
+              "type": "string",
+              "description": "Not stored in plain text. Hashed as an id for analytics",
+              "nullable": true,
+              "example": "user@domain.com"
+            },
+            "userCustomerId": {
+              "type": "string",
+              "description": "(OPTIONAL) Any string used to identify a customer, like:\"CUST01234\", \"1234412\", or \"PERSON1\"",
+              "nullable": true,
+              "example": "CUST01234"
+            },
+            "userGenderId": {
+              "type": "integer",
+              "description": "(OPTIONAL)\r\n0 = Unknown\r\n1 = Male\r\n2 = Female\r\n3 = Other",
+              "format": "int32",
+              "example": 2
+            },
+            "userLocationAddress": {
+              "type": "string",
+              "description": "(OPTIONAL) User's Location Address",
+              "nullable": true,
+              "example": "123 Main Street"
+            },
+            "userLocationCity": {
+              "type": "string",
+              "description": "(OPTIONAL) The user's city",
+              "nullable": true,
+              "example": "Chicago"
+            },
+            "userLocationZipCode": {
+              "type": "string",
+              "description": "(OPTIONAL) The user's zipcode",
+              "nullable": true,
+              "example": "60601"
+            },
+            "userLocationCountry": {
+              "type": "string",
+              "description": "(OPTIONAL) The user's country",
+              "nullable": true,
+              "example": "US"
+            },
+            "userLocationRegion": {
+              "type": "string",
+              "description": "OPTIONAL",
+              "nullable": true,
+              "example": "US - Midwest"
+            },
+            "userExtensions": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "(OPTIONAL) Free form JSON to send metadata\r\nfor user based analytics",
+              "nullable": true
+            },
+            "extensions": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "(OPTIONAL) Free form JSON to send metadata\r\nfor user based analytics",
+              "nullable": true
+            },
+            "notificationEmail": {
+              "type": "string",
+              "description": "If email notifications are enabled, we will attempt to email this address with donation confirmation if provided",
+              "nullable": true,
+              "example":"user@domain.com"
+            },
+            "notificationName": {
+              "type": "string",
+              "description": "If email notifications are enabled, this is the name of the user the donation confirmation is addressed towards",
+              "nullable": true,
+              "example": "Jane Smith"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateSaleResponse": {
+          "type": "object",
+          "properties": {
+            "saleId": {
+              "type": "string",
+              "description": "The Id of the created Sale",
+              "nullable": true,
+              "example": "0553e32b-20c4-e48f-232a-af5a0d690206"
+            }
+          },
+          "additionalProperties": false
+        },
+        "DocValidationResponse": {
+          "type": "object",
+          "properties": {
+            "statusCode": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "message": {
+              "type": "string",
+              "nullable": true
+            },
+            "validationFailures": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "securitySchemes": {
+        "bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
+        "API Key": {
+          "type": "apiKey",
+          "description": "ShoppingGives API KEY",
+          "name": "x-store-api-key",
+          "in": "header"
+        }
+      }
+    }
+  }
