@@ -21,11 +21,11 @@
             {
               "name": "x-store-id",
               "in": "header",
-              "description": "Store ID",
+              "description": "ShoppingGives Store ID",
               "required": true,
               "schema": {
                 "type": "string",
-                "description": "Store ID",
+                "description": "ShoppingGives Store ID",
                 "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
               }
             }
@@ -118,10 +118,10 @@
             {
               "name": "x-store-id",
               "in": "header",
-              "description": "Store ID",
+              "description": "ShoppingGives Store ID",
               "schema": {
                 "type": "string",
-                "description": "Store ID",
+                "description": "ShoppingGives Store ID",
                 "nullable": true,
                 "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
               }
@@ -193,10 +193,10 @@
             {
               "name": "x-store-id",
               "in": "header",
-              "description": "Store ID",
+              "description": "ShoppingGives Store ID",
               "schema": {
                 "type": "string",
-                "description": "Store ID",
+                "description": "ShoppingGives Store ID",
                 "nullable": true,
                 "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
               }
@@ -271,10 +271,10 @@
             {
               "name": "x-store-id",
               "in": "header",
-              "description": "Store ID",
+              "description": "ShoppingGives Store ID",
               "schema": {
                 "type": "string",
-                "description": "Store ID",
+                "description": "ShoppingGives Store ID",
                 "nullable": true,
                 "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
               }
@@ -362,10 +362,10 @@
             {
               "name": "x-store-id",
               "in": "header",
-              "description": "Store ID",
+              "description": "ShoppingGives Store ID",
               "schema": {
                 "type": "string",
-                "description": "Store ID",
+                "description": "ShoppingGives Store ID",
                 "nullable": true,
                 "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
               }

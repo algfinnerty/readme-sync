@@ -1,0 +1,384 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "ChangeCommerce Tracking",
+      "description": "The Tracking API is a repository of interactions a shopper makes with the ShoppingGives widget while shopping on a customer Store. The primary use is to bridge the UI / Back-end gap for when a user selects a cause and checkout, and then a webhook from a 3rd party ECommerce platform with no context of the user’s cause selection. ",
+      "version": "v1"
+    },
+    "servers": [
+      {
+        "url": "https://tracking.api.shoppinggives.com"
+      }
+    ],
+    "paths": {
+      "/": {
+        "post": {
+          "tags": [
+            "Tracking"
+          ],
+          "summary": "Creates a new Tracking instance",
+          "description": "<h3>Request Samples:</h3>\r\n<b>Simple:</b>\r\n<br />\r\n<br />\r\n<code>\r\n            {\r\n               \"storeId\" : \"19cf488b-7e72-4244-9faa-c7c3ec918bc2\",\r\n               \"userEmail\" : \"test@shopppinggives.com\",\r\n               \"isTestMode\" : false,\r\n               \"isForceTestMode\" : false\r\n            }\r\n            </code>\r\n<br />\r\n<br />\r\n            Cookie Set:<br /><br /><code>\r\n            {\r\n               Path = \"/\",\r\n               HttpOnly = true,\r\n               Domain = (string),\r\n               SameSite = SameSiteMode.None,\r\n               Secure = true\r\n            }\r\n            </code><br /><div>This cookie helps with conversions but is not expected to work\r\n            on all browsers for all users. It works in conjunction with the tracking conversion pixel</div><br /><br />",
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartTrackingRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartTrackingRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartTrackingRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartTrackingRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StartTrackingResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Store Id is required",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Tracking ID must correlate to an existing Tracking instance",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            }
+          ]
+        }
+      },
+      "/{id}/set-cause": {
+        "put": {
+          "tags": [
+            "Tracking"
+          ],
+          "summary": "Associates a cause (portfolio or ein) to an existing tracking instance.",
+          "description": "Authorization: None\r\n<h3>Request Samples:</h3><b>Setting to a Charity</b><br /><br /><code>\r\n{\r\n   \"causeId\" : \"1234567\",\r\n   \"causeName\" : \"Some Charity\"\r\n}\r\n</code><br /><br /><b>Setting to a Portfolio</b><br /><br /><code>\r\n{\r\n   \"causeId\" : \"19954e74-3bc4-482b-be50-08ce97baf8ae\",\r\n   \"causeName\" : \"Some Portfolio\"\r\n}\r\n</code><br /><br />",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ShoppingGives Tracking ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives Tracking ID",
+                "nullable": true
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCauseRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCauseRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCauseRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetCauseRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Tracking ID must correlate to an existing Tracking instance",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            }
+          ]
+        }
+      },
+      "/{id}/cause": {
+        "get": {
+          "tags": [
+            "Tracking"
+          ],
+          "summary": "Retrieves the specified cause associated with a specific Tracking instance.",
+          "description": "Authorization: None",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ShoppingGives Tracking ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives Tracking ID",
+                "nullable": true
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TrackingCauseModel"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Tracking ID must correlate to an existing Tracking instance",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            }
+          ]
+        }
+      },
+      "/set-user": {
+        "post": {
+          "tags": [
+            "Tracking"
+          ],
+          "summary": "Set user post creation on tracking",
+          "parameters": [
+            {
+              "name": "tracking-id",
+              "in": "query",
+              "description": "ShoppingGives Tracking ID",
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives Tracking ID",
+                "nullable": true
+              }
+            },
+            {
+              "name": "user-id",
+              "in": "query",
+              "description": "ShoppingGives User ID",
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives User ID",
+                "nullable": true
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "StartTrackingRequest": {
+          "required": [
+            "storeId"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Optional Tracking ID. Generally do not provide. It will generate a GUID for you.",
+              "format": "uuid",
+              "nullable": true
+            },
+            "storeId": {
+              "type": "string",
+              "description": "ID of the Store the tracking is getting set on",
+              "format": "uuid"
+            },
+            "extensions": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Custom, Freeform JSON Extensions for future querying and analytics",
+              "nullable": true
+            },
+            "userEmail": {
+              "type": "string",
+              "description": "UserEmail that is not stored in raw text, hashed as the GivingProfileId",
+              "nullable": true
+            },
+            "isTestMode": {
+              "type": "boolean",
+              "description": "Sets this tracking as TestMode. If attached to a sale, a test conversion will be made but no donations will be made"
+            },
+            "isForceTestMode": {
+              "type": "boolean",
+              "description": "Forces TestMode (needs more research WHY this is necessary)"
+            }
+          },
+          "additionalProperties": false
+        },
+        "StartTrackingResponse": {
+          "type": "object",
+          "properties": {
+            "trackingId": {
+              "type": "string",
+              "description": "ID of the tracking just created",
+              "nullable": true
+            },
+            "causeId": {
+              "type": "string",
+              "description": "Cause ID if store default loaded",
+              "nullable": true
+            },
+            "causeName": {
+              "type": "string",
+              "description": "Cause Name if store default loaded",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "nullable": true
+            },
+            "statusCode": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "message": {
+              "type": "string",
+              "nullable": true
+            },
+            "stackTrace": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "SetCauseRequest": {
+          "required": [
+            "causeId",
+            "causeName"
+          ],
+          "type": "object",
+          "properties": {
+            "causeId": {
+              "type": "string",
+              "description": "Cause ID. Can be an EIN or Portfolio ID"
+            },
+            "causeName": {
+              "type": "string",
+              "description": "Cause name for the Charity or Portfolio"
+            }
+          },
+          "additionalProperties": false
+        },
+        "SuccessResponse": {
+          "type": "object",
+          "additionalProperties": false
+        },
+        "TrackingCauseModel": {
+          "type": "object",
+          "properties": {
+            "causeId": {
+              "type": "string",
+              "nullable": true
+            },
+            "causeName": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "securitySchemes": {
+        "bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
+        "API Key": {
+          "type": "apiKey",
+          "description": "ShoppingGives API KEY",
+          "name": "x-store-api-key",
+          "in": "header"
+        }
+      }
+    }
+  }
