@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.1",
     "info": {
-      "title": "ChangeCommerce Tracking",
+      "title": "Tracking User Interactions",
       "description": "The Tracking API is a repository of interactions a shopper makes with the ShoppingGives widget while shopping on a customer Store. The primary use is to bridge the UI / Back-end gap for when a user selects a cause and checkout, and then a webhook from a 3rd party ECommerce platform with no context of the user’s cause selection. ",
       "version": "v1"
     },
@@ -16,8 +16,8 @@
           "tags": [
             "Tracking"
           ],
-          "summary": "Creates a new Tracking instance",
-          "description": "<h3>Request Samples:</h3>\r\n<b>Simple:</b>\r\n<br />\r\n<br />\r\n<code>\r\n            {\r\n               \"storeId\" : \"19cf488b-7e72-4244-9faa-c7c3ec918bc2\",\r\n               \"userEmail\" : \"test@shopppinggives.com\",\r\n               \"isTestMode\" : false,\r\n               \"isForceTestMode\" : false\r\n            }\r\n            </code>\r\n<br />\r\n<br />\r\n            Cookie Set:<br /><br /><code>\r\n            {\r\n               Path = \"/\",\r\n               HttpOnly = true,\r\n               Domain = (string),\r\n               SameSite = SameSiteMode.None,\r\n               Secure = true\r\n            }\r\n            </code><br /><div>This cookie helps with conversions but is not expected to work\r\n            on all browsers for all users. It works in conjunction with the tracking conversion pixel</div><br /><br />",
+          "summary": "Create a new Tracking instance",
+          "description": "<h3>Request Samples:</h3>\r\n<b>Simple:</b>\r\n<br />\r\n<code>\r\n            {\r\n               \"storeId\" : \"19cf488b-7e72-4244-9faa-c7c3ec918bc2\",\r\n               \"userEmail\" : \"test@shopppinggives.com\",\r\n               \"isTestMode\" : false,\r\n               \"isForceTestMode\" : false\r\n            }\r\n            </code>\r\n<br />\r\n          <b>Cookie Set:</b><br /><code>\r\n            {\r\n               Path = \"/\",\r\n               HttpOnly = true,\r\n               Domain = (string),\r\n               SameSite = SameSiteMode.None,\r\n               Secure = true\r\n            }\r\n            </code><br /><div>This cookie helps with conversions but is not expected to work\r\n            on all browsers for all users. It works in conjunction with the tracking conversion pixel</div><br /><br />",
           "requestBody": {
             "description": "",
             "content": {
@@ -88,7 +88,7 @@
             "Tracking"
           ],
           "summary": "Associates a cause (portfolio or ein) to an existing tracking instance.",
-          "description": "Authorization: None\r\n<h3>Request Samples:</h3><b>Setting to a Charity</b><br /><br /><code>\r\n{\r\n   \"causeId\" : \"1234567\",\r\n   \"causeName\" : \"Some Charity\"\r\n}\r\n</code><br /><br /><b>Setting to a Portfolio</b><br /><br /><code>\r\n{\r\n   \"causeId\" : \"19954e74-3bc4-482b-be50-08ce97baf8ae\",\r\n   \"causeName\" : \"Some Portfolio\"\r\n}\r\n</code><br /><br />",
+          "description": "Authorization: None\r\n<h3>Request Samples:</h3><b>Setting to a Charity</b><br /><code>\r\n{\r\n   \"causeId\" : \"1234567\",\r\n   \"causeName\" : \"Some Charity\"\r\n}\r\n</code><br /><b>Setting to a Portfolio</b><br /><code>\r\n{\r\n   \"causeId\" : \"19954e74-3bc4-482b-be50-08ce97baf8ae\",\r\n   \"causeName\" : \"Some Portfolio\"\r\n}\r\n</code><br /><br />",
           "parameters": [
             {
               "name": "id",
@@ -98,7 +98,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives Tracking ID",
-                "nullable": true
+                "nullable": true,
+                "example": "f90fe534-2f6d-492c-a03c-24d69079170c"
               }
             }
           ],
@@ -172,7 +173,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives Tracking ID",
-                "nullable": true
+                "nullable": true,
+                "example": "f90fe534-2f6d-492c-a03c-24d69079170c"
               }
             }
           ],
@@ -219,7 +221,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives Tracking ID",
-                "nullable": true
+                "nullable": true,
+                "example": "f90fe534-2f6d-492c-a03c-24d69079170c"
               }
             },
             {
@@ -229,7 +232,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives User ID",
-                "nullable": true
+                "nullable": true,
+                "example": "461a8604-b79d-40f0-b609-f35366f08c20"
               }
             }
           ],
@@ -258,23 +262,26 @@
               "type": "string",
               "description": "Optional Tracking ID. Generally do not provide. It will generate a GUID for you.",
               "format": "uuid",
-              "nullable": true
+              "nullable": true,
+              "example": "f90fe534-2f6d-492c-a03c-24d69079170c"
             },
             "storeId": {
               "type": "string",
               "description": "ID of the Store the tracking is getting set on",
-              "format": "uuid"
+              "format": "uuid",
+              "example": "19cf488b-7e72-4244-9faa-c7c3ec918bc2"
             },
             "extensions": {
               "type": "object",
-              "additionalProperties": false,
+              "additionalProperties": true,
               "description": "Custom, Freeform JSON Extensions for future querying and analytics",
               "nullable": true
             },
             "userEmail": {
               "type": "string",
               "description": "UserEmail that is not stored in raw text, hashed as the GivingProfileId",
-              "nullable": true
+              "nullable": true,
+              "example": "user@domain.com"
             },
             "isTestMode": {
               "type": "boolean",
@@ -282,7 +289,7 @@
             },
             "isForceTestMode": {
               "type": "boolean",
-              "description": "Forces TestMode (needs more research WHY this is necessary)"
+              "description": "Forces TestMode"
             }
           },
           "additionalProperties": false
@@ -293,17 +300,20 @@
             "trackingId": {
               "type": "string",
               "description": "ID of the tracking just created",
-              "nullable": true
+              "nullable": true,
+              "example": "f90fe534-2f6d-492c-a03c-24d69079170c"
             },
             "causeId": {
               "type": "string",
               "description": "Cause ID if store default loaded",
-              "nullable": true
+              "nullable": true,
+              "example": "19954e74-3bc4-482b-be50-08ce97baf8ae"
             },
             "causeName": {
               "type": "string",
               "description": "Cause Name if store default loaded",
-              "nullable": true
+              "nullable": true,
+              "example": "Some Charity"
             }
           },
           "additionalProperties": false
@@ -339,11 +349,14 @@
           "properties": {
             "causeId": {
               "type": "string",
-              "description": "Cause ID. Can be an EIN or Portfolio ID"
+              "description": "Cause ID. Can be an EIN or Portfolio ID",
+              "example": "19954e74-3bc4-482b-be50-08ce97baf8ae"
+              
             },
             "causeName": {
               "type": "string",
-              "description": "Cause name for the Charity or Portfolio"
+              "description": "Cause name for the Charity or Portfolio",
+              "example": "Some Charity"
             }
           },
           "additionalProperties": false
@@ -357,11 +370,15 @@
           "properties": {
             "causeId": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Cause ID. Can be an EIN or Portfolio ID",
+              "example": "19954e74-3bc4-482b-be50-08ce97baf8ae"
             },
             "causeName": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "description": "Cause name for the Charity or Portfolio",
+              "example": "Some Charity"
             }
           },
           "additionalProperties": false

@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.1",
     "info": {
-      "title": "ChangeCommerce Donations",
+      "title": "Creating Donations",
       "description": "The Donations API tracks all updates to donations from all sources all around ShoppingGives and paid out to the charity",
       "version": "v1"
     },
@@ -16,8 +16,8 @@
           "tags": [
             "Donations"
           ],
-          "summary": "Creates a donation",
-          "description": "Authorization: Store:Donation:Create\r\n            \r\nDonations generated through this endpoint will be placed on the store's currently open receivable and charged \r\nfor the donation like any other e-commerce driven donation",
+          "summary": "Create a donation",
+          "description": "Authorization: Store:Donation:Create\r\n            \r\nDonations generated through this endpoint will be placed\r\n on the store's currently open receivable and charged for the donation \r\nlike any other e-commerce driven donation",
           "parameters": [
             {
               "name": "x-store-id",
@@ -122,7 +122,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives SaleId",
-                "nullable": true
+                "nullable": true,
+                "example": "d8b3bf08-85ca-4952-80e8-ff8b39eab8b6"
               }
             },
             {
@@ -196,7 +197,8 @@
               "schema": {
                 "type": "string",
                 "description": "ShoppingGives Receivable ID",
-                "nullable": true
+                "nullable": true,
+                "example": "c1fec9cd-2975-43a0-bb8e-d3db5f534ea6"
               }
             },
             {
@@ -292,7 +294,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Customer ID",
-                "nullable": true
+                "nullable": true,
+                "example": "CUST01234"
               }
             }
           ],
@@ -355,7 +358,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Customer ID",
-                "nullable": true
+                "nullable": true,
+                "example": "CUST01234"
               }
             }
           ],
@@ -397,6 +401,7 @@
             "Donations"
           ],
           "summary": "Get specific order donation information for customer",
+          "description": "Authorization: Store:Donation:Read",
           "parameters": [
             {
               "name": "x-store-id",
@@ -417,7 +422,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Customer ID",
-                "nullable": true
+                "nullable": true,
+                "example": "CUST01234"
               }
             },
             {
@@ -427,7 +433,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Order ID",
-                "nullable": true
+                "nullable": true,
+                "example": "4123"
               }
             }
           ],
@@ -472,6 +479,7 @@
             "Donations"
           ],
           "summary": "Get most recent order donation information for customer",
+          "description": "Authorization: Store:Donation:Read",
           "parameters": [
             {
               "name": "x-store-id",
@@ -492,7 +500,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Customer ID",
-                "nullable": true
+                "nullable": true,
+                "example": "CUST01234"
               }
             }
           ],
@@ -537,6 +546,7 @@
             "Donations"
           ],
           "summary": "Get orders' donation information for a customer",
+          "description":"Authorization: Store:Donation:Read",
           "parameters": [
             {
               "name": "x-store-id",
@@ -557,7 +567,8 @@
               "schema": {
                 "type": "string",
                 "description": "Store's Customer ID",
-                "nullable": true
+                "nullable": true,
+                "example": "CUST01234"
               }
             },
             {
@@ -568,7 +579,8 @@
                 "type": "integer",
                 "description": "Number of results to return (Default = 25)",
                 "format": "int32",
-                "nullable": true
+                "nullable": true,
+                "example": 10
               }
             },
             {
@@ -579,7 +591,8 @@
                 "type": "integer",
                 "description": "Current page of results (Default = 1)",
                 "format": "int32",
-                "nullable": true
+                "nullable": true,
+                "example": 5
               }
             }
           ],
@@ -665,14 +678,14 @@
               "description": "Date after which the donation cannot be altered (Optional) (Default = Now)",
               "format": "date-time",
               "nullable": true,
-              "example": "2020-10-05T15:31:53.3290000"
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             },
             "orderCreatedAtUtc": {
               "type": "string",
               "description": "When the order was created at (in UTC)",
               "format": "date-time",
               "nullable": true,
-              "example": "2020-10-05T15:31:53.3290000"
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             },
             "userId": {
               "type": "string",
@@ -722,7 +735,8 @@
             "donationId": {
               "type": "string",
               "description": "Id of generated donation",
-              "nullable": true
+              "nullable": true,
+              "example": "45678"
             }
           },
           "additionalProperties": false
@@ -749,7 +763,8 @@
             "name": {
               "type": "string",
               "description": "Name of the charity",
-              "nullable": true
+              "nullable": true,
+              "example": "Some Charity"
             },
             "categoryId": {
               "type": "integer",
@@ -775,7 +790,8 @@
             "name": {
               "type": "string",
               "description": "Portfolio Name",
-              "nullable": true
+              "nullable": true,
+              "example": "Some Portfolio"
             },
             "charities": {
               "type": "array",
@@ -800,12 +816,14 @@
               "type": "string",
               "description": "ShoppingGives Sale ID associated to donation",
               "format": "uuid",
-              "nullable": true
+              "nullable": true,
+              "example": "d8b3bf08-85ca-4952-80e8-ff8b39eab8b6"
             },
             "storeId": {
               "type": "string",
               "description": "ShoppingGives Store ID",
-              "format": "uuid"
+              "format": "uuid",
+              "example":"461a8604-b79d-40f0-b609-f35366f08c20"
             },
             "status": {
               "$ref": "#/components/schemas/DonationStatus"
@@ -813,18 +831,21 @@
             "causeId": {
               "type": "string",
               "description": "Cause Id (Can be either int for charity or uuid for portfolio)",
-              "nullable": true
+              "nullable": true,
+              "example": "392008377"
             },
             "donationAmount": {
               "type": "number",
               "description": "Amount of donation",
-              "format": "double"
+              "format": "double",
+              "example": 4
             },
             "receivableId": {
               "type": "string",
               "description": "ShoppingGives Receivable Id",
               "format": "uuid",
-              "nullable": true
+              "nullable": true,
+              "example": "c1fec9cd-2975-43a0-bb8e-d3db5f534ea6"
             },
             "portfolioInfo": {
               "$ref": "#/components/schemas/PortfolioResponse"
@@ -840,7 +861,9 @@
               "type": "string",
               "description": "Time at which the donation cannot be changed",
               "format": "date-time",
-              "nullable": true
+              "nullable": true,
+              "example": "2021-03-11T18:59:20.0000000+00:00"
+
             },
             "attemptedRefundButAlreadyPaid": {
               "type": "boolean",
@@ -850,7 +873,9 @@
               "type": "string",
               "description": "When order was created (UTC) (if supplied)",
               "format": "date-time",
-              "nullable": true
+              "nullable": true,
+              "example": "2021-03-11T18:59:20.0000000+00:00"
+
             },
             "paidByCustomer": {
               "type": "boolean",
@@ -860,7 +885,8 @@
               "type": "integer",
               "description": "(Nullable) Type of direct donation (0 = Add-On, 1 = Round Up)",
               "format": "int32",
-              "nullable": true
+              "nullable": true,
+              "example": 0
             }
           },
           "additionalProperties": false
@@ -871,7 +897,8 @@
             "totalDonations": {
               "type": "number",
               "description": "Total amount of donations generated",
-              "format": "double"
+              "format": "double",
+              "example": 1000
             },
             "customerExists": {
               "type": "boolean",
@@ -895,12 +922,14 @@
             "cause": {
               "type": "string",
               "description": "Cause name",
-              "nullable": true
+              "nullable": true,
+              "example": "Some Charity"
             },
             "donations": {
               "type": "number",
               "description": "Amount donated to cause",
-              "format": "double"
+              "format": "double",
+              "example": 4
             }
           },
           "additionalProperties": false
@@ -924,27 +953,33 @@
             "orderId": {
               "type": "string",
               "description": "Store's order id",
-              "nullable": true
+              "nullable": true,
+              "example": "#4123"
             },
             "causeName": {
               "type": "string",
               "description": "Donation cause name",
-              "nullable": true
+              "nullable": true,
+              "example": "Some Charity"
             },
             "orderDate": {
               "type": "string",
               "description": "Date of order",
-              "format": "date-time"
+              "format": "date-time",
+              "example": "2021-03-11T18:59:20.0000000+00:00"
+
             },
             "orderTotal": {
               "type": "number",
               "description": "Total paid by customer for order",
-              "format": "double"
+              "format": "double",
+              "example": 110
             },
             "donationAmount": {
               "type": "number",
-              "description": "Donation amount",
-              "format": "double"
+              "description": "The amount of the donation",
+              "format": "double",
+              "example": 4
             }
           },
           "additionalProperties": false

@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.1",
     "info": {
-      "title": "ChangeCommerce Products",
+      "title": "Creating and Managing Products",
       "version": "v1"
     },
     "servers": [
@@ -162,6 +162,100 @@
           ]
         }
       },
+      "/subitem/get-filtered-search": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "summary": "Search Subitems",
+          "description": "Authorization: Store:Products:Read\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationType</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>Range (Removed)</td></tr></tbody></table><hr /><strong>ExclusionFilters</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>ExcludedVariantsOnly</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>IncludedVariantsOnly</td></tr></tbody></table><hr />",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "schema": {
+                "type": "string",
+                "nullable": true,
+                "description": "ShoppingGives Store ID",
+                "format": "uuid",
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageLength",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 25
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredSearchRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredSearchRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredSearchRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredSearchRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FilteredSearchResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Paginated page numbers must begin at 1, not 0",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
       "/grouping": {
         "post": {
           "tags": [
@@ -263,7 +357,8 @@
               "required": true,
               "schema": {
                 "type": "integer",
-                "format": "int64"
+                "format": "int64",
+                "example": 1234
               }
             }
           ],
@@ -323,13 +418,248 @@
           ]
         }
       },
+      "/get-multiple-donation": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "summary": "Calculate Donation for Cart",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "ShoppingGives Store ID",
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives Store ID",
+                "nullable": true,
+                "format": "uuid",
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CartDonationModel"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/product/{id}/donation-value": {
+        "get": {
+          "tags": [
+            "Products"
+          ],
+          "summary": "Get Donation on Product",
+          "description": "Authorization: Store:Products:Read\r\n<br />\r\nFeature Requirement: product-donations",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "schema": {
+                "type": "string",
+                "nullable": true,
+                "description": "ShoppingGives Store ID",
+                "format": "uuid",
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            {
+              "name": "realPrice",
+              "in": "query",
+              "schema": {
+                "type": "number",
+                "format": "double",
+                "description": "Price of Subitem",
+                "nullable": true,
+                "example": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DonationValueModel"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Store Id is required",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
+      "/donation-by-cms-id": {
+        "get": {
+          "tags": [
+            "Products"
+          ],
+          "summary": "Calculate Donation for Subitem",
+          "parameters": [
+            {
+              "name": "x-store-id",
+              "in": "header",
+              "description": "ShoppingGives Store ID",
+              "schema": {
+                "type": "string",
+                "description": "ShoppingGives Store ID",
+                "nullable": true,
+                "format": "uuid",
+                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
+              }
+            },
+            {
+              "name": "cmsId",
+              "in": "query",
+              "description": "The Id of the subitem in the originating platform",
+              "schema": {
+                "type": "string",
+                "description": "The Id of the subitem in the originating platform",
+                "nullable": true,
+                "example": "008675309-1"
+              }
+            },
+            {
+              "name": "realPrice",
+              "in": "query",
+              "description": "Price of Subitem",
+              "schema": {
+                "type": "number",
+                "description": "Price of Subitem",
+                "format": "double",
+                "nullable": true,
+                "example": 10
+              }
+            },
+            {
+              "name": "providedCauseId",
+              "in": "query",
+              "description": "Cause ID selected (Optional)",
+              "schema": {
+                "type": "string",
+                "description": "Cause ID selected (Optional)",
+                "nullable": true,
+                "example": "Some Charity"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DonationValueModel"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearer": [ ]
+            },
+            {
+              "API Key": [ ]
+            }
+          ]
+        }
+      },
       "/product/{id}/donation": {
         "put": {
           "tags": [
             "Products"
           ],
           "summary": "Assign Donation to Product",
-          "description": "Creates a new Donation and assigns it to the product. Also clears any Group donation overrides in place on the Product.\r\n<br /><br />\r\nAuthorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
+          "description": "Authorization: Store:Products:Write\r\n<br />\r\nCreates a new Donation and assigns it to the product. Also clears any Group donation overrides in place on the Product.\r\n<br />Feature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
           "parameters": [
             {
               "name": "x-store-id",
@@ -414,7 +744,7 @@
             "Products"
           ],
           "summary": "Assign Donation to Subitem",
-          "description": "Creates a new Donation and assigns it to the subitem. Also clears any Group donation overrides in place on the subitem (but not its parent product).\r\n<br /><br />\r\nAuthorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
+          "description": "Authorization: Store:Products:Write\r\n<br />\r\nCreates a new Donation and assigns it to the subitem. Also clears any Group donation overrides in place on the subitem (but not its parent product).\r\n<br />Feature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
           "parameters": [
             {
               "name": "x-store-id",
@@ -499,7 +829,7 @@
             "Products"
           ],
           "summary": "Bulk Assign Donation to Subitems",
-          "description": "Creates a new Donation and assigns it to the subitems. Also clears any Group donation overrides in place on the subitems (but not its parent product).\r\n<br /><br />\r\nAuthorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
+          "description": "Authorization: Store:Products:Write\r\n<br />\r\nCreates a new Donation and assigns it to the subitems. Also clears any Group donation overrides in place on the subitems (but not its parent product).\r\n<br />Feature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
           "parameters": [
             {
               "name": "x-store-id",
@@ -580,7 +910,7 @@
             "Products"
           ],
           "summary": "Assigns Donation to a Group",
-          "description": "Creates a new Donation and assigns it to the group. This does not automatically assign the donation to all member entities of the group\r\n<br /><br />\r\nAuthorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
+          "description": "Authorization: Store:Products:Write\r\n<br />\r\nCreates a new Donation and assigns it to the group. This does not automatically assign the donation to all member entities of the group\r\n<br />Feature Requirement: product-donations\r\n<br /><strong>DonationTypes</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr></tbody></table>",
           "parameters": [
             {
               "name": "x-store-id",
@@ -659,107 +989,13 @@
           ]
         }
       },
-      "/subitem/get-filtered-search": {
-        "post": {
-          "tags": [
-            "Products"
-          ],
-          "summary": "Search Subitems",
-          "description": "<br />\r\n            Authorization: Store:Products:Read\r\n            <br />\r\n            Feature Requirement: product-donations\r\n            <br /><strong>DonationType</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>Range (Removed)</td></tr></tbody></table><hr /><strong>ExclusionFilters</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>ExcludedVariantsOnly</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>IncludedVariantsOnly</td></tr></tbody></table><hr />",
-          "parameters": [
-            {
-              "name": "x-store-id",
-              "in": "header",
-              "schema": {
-                "type": "string",
-                "nullable": true,
-                "description": "ShoppingGives Store ID",
-                "format": "uuid",
-                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
-              }
-            },
-            {
-              "name": "page",
-              "in": "query",
-              "schema": {
-                "type": "integer",
-                "format": "int32",
-                "default": 1
-              }
-            },
-            {
-              "name": "pageLength",
-              "in": "query",
-              "schema": {
-                "type": "integer",
-                "format": "int32",
-                "default": 25
-              }
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json-patch+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FilteredSearchRequest"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FilteredSearchRequest"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FilteredSearchRequest"
-                }
-              },
-              "application/*+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FilteredSearchRequest"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Success",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/FilteredSearchResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Paginated page numbers must begin at 1, not 0",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ErrorResponse"
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": [ ]
-            },
-            {
-              "API Key": [ ]
-            }
-          ]
-        }
-      },
       "/subitem/filtered-update": {
         "put": {
           "tags": [
             "Products"
           ],
           "summary": "Bulk assign donations of subitems that match filters",
-          "description": "<br />\r\n            Authorization: Store:Products:Write\r\n            <br />\r\n            Feature Requirement: product-donations\r\n            <br /><strong>DonationType</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>Range (Removed)</td></tr></tbody></table><hr /><strong>ExclusionFilters</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>ExcludedVariantsOnly</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>IncludedVariantsOnly</td></tr></tbody></table><hr />",
+          "description": "Authorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations\r\n<br /><strong>DonationType</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>Percent (x% of price is donated)</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>Range (Removed)</td></tr></tbody></table><hr /><strong>ExclusionFilters</strong><br /><table><thead><th>Value</th><th>Name</th></thead><tbody><tr><td>0</td><td>ExcludedVariantsOnly</td></tr><tr><td>1</td><td>Flat ($x donation)</td></tr><tr><td>2</td><td>IncludedVariantsOnly</td></tr></tbody></table><hr />",
           "parameters": [
             {
               "name": "x-store-id",
@@ -856,7 +1092,8 @@
               "schema": {
                 "type": "integer",
                 "description": "The ID of the Product that will be referenced",
-                "format": "int64"
+                "format": "int64",
+                "example": 12345
               }
             }
           ],
@@ -919,7 +1156,8 @@
               "schema": {
                 "type": "integer",
                 "description": "The ID of the Subitem that will be referenced",
-                "format": "int64"
+                "format": "int64",
+                "example": 9876
               }
             }
           ],
@@ -982,7 +1220,8 @@
               "schema": {
                 "type": "integer",
                 "description": "The ID of the Product that will be referenced",
-                "format": "int64"
+                "format": "int64",
+                "example": 12345
               }
             }
           ],
@@ -1069,7 +1308,8 @@
               "schema": {
                 "type": "integer",
                 "description": "The ID of the Subitem that will be referenced",
-                "format": "int64"
+                "format": "int64",
+                "example": 9876
               }
             }
           ],
@@ -1156,7 +1396,8 @@
               "schema": {
                 "type": "integer",
                 "description": "The ID of the Subitem that will be referenced",
-                "format": "int64"
+                "format": "int64",
+                "example": 9876
               }
             }
           ],
@@ -1215,236 +1456,6 @@
             }
           ]
         }
-      },
-      "/product/{id}/donation-value": {
-        "get": {
-          "tags": [
-            "Products"
-          ],
-          "summary": "Get Donation on Product",
-          "description": "Authorization: Store:Products:Write\r\n<br />\r\nFeature Requirement: product-donations",
-          "parameters": [
-            {
-              "name": "x-store-id",
-              "in": "header",
-              "schema": {
-                "type": "string",
-                "nullable": true,
-                "description": "ShoppingGives Store ID",
-                "format": "uuid",
-                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer",
-                "format": "int64"
-              }
-            },
-            {
-              "name": "realPrice",
-              "in": "query",
-              "schema": {
-                "type": "number",
-                "format": "double",
-                "nullable": true
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/DonationValueModel"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Store Id is required",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ErrorResponse"
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": [ ]
-            },
-            {
-              "API Key": [ ]
-            }
-          ]
-        }
-      },
-      "/donation-by-cms-id": {
-        "get": {
-          "tags": [
-            "Products"
-          ],
-          "summary": "Calculate Donation for Subitem",
-          "parameters": [
-            {
-              "name": "x-store-id",
-              "in": "header",
-              "description": "ShoppingGives Store ID",
-              "schema": {
-                "type": "string",
-                "description": "ShoppingGives Store ID",
-                "nullable": true,
-                "format": "uuid",
-                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
-              }
-            },
-            {
-              "name": "cmsId",
-              "in": "query",
-              "description": "Store's Subitem's ID",
-              "schema": {
-                "type": "string",
-                "description": "Store's Subitem's ID",
-                "nullable": true
-              }
-            },
-            {
-              "name": "realPrice",
-              "in": "query",
-              "description": "Price of Subitem",
-              "schema": {
-                "type": "number",
-                "description": "Price of Subitem",
-                "format": "double",
-                "nullable": true
-              }
-            },
-            {
-              "name": "providedCauseId",
-              "in": "query",
-              "description": "Cause ID selected (Optional)",
-              "schema": {
-                "type": "string",
-                "description": "Cause ID selected (Optional)",
-                "nullable": true
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/DonationValueModel"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad Request",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ErrorResponse"
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": [ ]
-            },
-            {
-              "API Key": [ ]
-            }
-          ]
-        }
-      },
-      "/get-multiple-donation": {
-        "post": {
-          "tags": [
-            "Products"
-          ],
-          "summary": "Calculate Donation for Cart",
-          "parameters": [
-            {
-              "name": "x-store-id",
-              "in": "header",
-              "description": "ShoppingGives Store ID",
-              "schema": {
-                "type": "string",
-                "description": "ShoppingGives Store ID",
-                "nullable": true,
-                "format": "uuid",
-                "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
-              }
-            }
-          ],
-          "requestBody": {
-            "description": "",
-            "content": {
-              "application/json-patch+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
-                }
-              },
-              "application/*+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MultipleDonationItemRequest"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Success",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/CartDonationModel"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad Request",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ErrorResponse"
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": [ ]
-            },
-            {
-              "API Key": [ ]
-            }
-          ]
-        }
       }
     },
     "components": {
@@ -1459,7 +1470,7 @@
             "cmsId": {
               "type": "string",
               "description": "The Id of the product in the originating platform",
-              "example": "008675309"
+              "example": "008675309-1"
             },
             "name": {
               "type": "string",
@@ -1491,7 +1502,7 @@
               "type": "string",
               "description": "Direct link to the product display page on your CMS.",
               "nullable": true,
-              "example": "Https://myShop.myPlatform.com/turbo-encabulator"
+              "example": "https://myShop.myPlatform.com/turbo-encabulator"
             }
           },
           "additionalProperties": false
@@ -1577,7 +1588,8 @@
             "images": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "example": "https://myShop.myPlatform.com/img/turbo-encabulator.png"
               },
               "description": "Full hyperlinks to hosted images for this subitem.",
               "nullable": true
@@ -1606,7 +1618,8 @@
             "images": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "example": "https://myShop.myPlatform.com/img/turbo-encabulator.png"
               },
               "description": "Full hyperlinks to hosted images for this group.",
               "nullable": true
@@ -1670,7 +1683,8 @@
             2
           ],
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "example": 0
         },
         "CreateDonationRequest": {
           "required": [
@@ -1706,14 +1720,14 @@
               "description": "Optional start time to offer donations for an entity.",
               "format": "date-time",
               "nullable": true,
-              "example": "2021-01-01T00:00:00.0000000"
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             },
             "endDateUtc": {
               "type": "string",
               "description": "Optional end time to offer donations for an entity.",
               "format": "date-time",
               "nullable": true,
-              "example": "2021-12-31T23:59:59.0000000"
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             }
           },
           "additionalProperties": false
@@ -1731,7 +1745,8 @@
           "properties": {
             "amount": {
               "type": "number",
-              "format": "double"
+              "format": "double",
+              "example": 19.99
             },
             "type": {
               "$ref": "#/components/schemas/DonationType"
@@ -1766,7 +1781,8 @@
               "type": "array",
               "items": {
                 "type": "integer",
-                "format": "int64"
+                "format": "int64",
+                "example": 9876
               },
               "description": "Ids of Subitems entities that will be excluded from the search",
               "nullable": true
@@ -1790,12 +1806,15 @@
           "properties": {
             "storeId": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "ShoppingGives Store ID",
+              "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
             },
             "defaultDonation": {
               "type": "number",
               "format": "double",
-              "nullable": true
+              "nullable": true,
+              "example": 5
             },
             "donationType": {
               "$ref": "#/components/schemas/DonationType"
@@ -1839,12 +1858,15 @@
           "properties": {
             "storeId": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "ShoppingGives Store ID",
+              "example": "321944e1-470d-4b0d-a3d8-cf4c96b5b88f"
             },
             "donationValue": {
               "type": "number",
               "format": "double",
-              "nullable": true
+              "nullable": true,
+              "example": 4
             },
             "donationType": {
               "$ref": "#/components/schemas/DonationType"
@@ -1912,7 +1934,9 @@
             },
             "donationAmount": {
               "type": "number",
-              "format": "double"
+              "format": "double",
+              "description": "Value of the new donation.",
+              "example": 4
             },
             "causes": {
               "type": "array",
@@ -1928,12 +1952,14 @@
             "startDateUtc": {
               "type": "string",
               "format": "date-time",
-              "nullable": true
+              "nullable": true,
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             },
             "endDateUtc": {
               "type": "string",
               "format": "date-time",
-              "nullable": true
+              "nullable": true,
+              "example": "2021-03-11T18:59:20.0000000+00:00"
             }
           },
           "additionalProperties": false
@@ -1947,7 +1973,9 @@
             },
             "productId": {
               "type": "integer",
-              "format": "int64"
+              "format": "int64",
+              "description": "The ID of the Product that will be referenced",
+              "example": 12345
             },
             "name": {
               "type": "string",
@@ -1969,14 +1997,14 @@
               "type": "boolean"
             },
             "donationType": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
+              "$ref": "#/components/schemas/DonationType"
             },
             "donationValue": {
               "type": "number",
               "format": "double",
-              "nullable": true
+              "nullable": true,
+              "description": "",
+              "example": 4
             },
             "causes": {
               "type": "array",
@@ -1988,7 +2016,8 @@
             "images": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "example": "https://myShop.myPlatform.com/img/turbo-encabulator.png"
               },
               "nullable": true
             },
@@ -2076,7 +2105,8 @@
               "type": "array",
               "items": {
                 "type": "integer",
-                "format": "int64"
+                "format": "int64",
+                "example": 9876
               },
               "description": "Ids of Subitems entities that will be excluded from the search",
               "nullable": true
@@ -2252,14 +2282,16 @@
             "cartDiscount": {
               "type": "number",
               "format": "double",
-              "nullable": true
+              "nullable": true,
+              "example": 4
             },
             "calculationsOnly": {
               "type": "boolean"
             },
             "providedCauseId": {
               "type": "string",
-              "nullable": true
+              "nullable": true,
+              "example": "392008377"
             },
             "ignoreDirectDonations": {
               "type": "boolean"
